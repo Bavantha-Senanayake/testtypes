@@ -1,0 +1,40 @@
+{
+  "name": "serverless-microservice-backend",
+  "version": "1.0.0",
+  "description": "Serverless Lambda backend with microservice architecture",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc",
+    "custom-build": "npm run build && node scripts/custom-build.js",
+    "generate-endpoint": "node scripts/generate-endpoint.js",
+    "start": "npm run build && node dist/local.js",
+    "dev": "nodemon --exec ts-node src/local.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf dist build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.490.0",
+    "@aws-sdk/lib-dynamodb": "^3.490.0",
+    "aws-serverless-express": "^3.4.0",
+    "axios": "^1.6.0",
+    "dotenv": "^17.2.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.131",
+    "@types/aws-serverless-express": "^3.3.9",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.10.0",
+    "@types/uuid": "^9.0.7",
+    "nodemon": "^3.0.1",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

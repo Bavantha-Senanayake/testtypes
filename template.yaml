@@ -1,0 +1,185 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Serverless microservice backend
+
+Globals:
+  Function:
+    Timeout: 30
+    Runtime: nodejs18.x
+    MemorySize: 512
+    Environment:
+      Variables:
+        NODE_ENV: !Ref NodeEnv
+        TABLE_NAME: !Ref TableName
+        AWS_REGION_NAME: !Ref AwsRegion
+        NEW: !Ref new
+        Environment: !Ref Environment
+
+
+Parameters:
+  Environment:
+    Type: String
+    Description: Deployment environment
+  TableName:
+    Type: String
+    Description: DynamoDB table name
+  AwsRegion:
+    Type: String
+    Description: AWS region
+  NodeEnv:
+    Type: String
+    Description: Node.js environment
+  new:
+    Type: String
+    Description: A new parameter for demonstration
+
+
+Resources:
+  #============DYNAMODB START ============
+  testTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Ref TableName
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+        - AttributeName: updatedAt
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+      LocalSecondaryIndexes:
+        - IndexName: QuestionsByUpdatedAt
+          KeySchema:
+            - AttributeName: PK
+              KeyType: HASH
+            - AttributeName: updatedAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+  #============DYNAMODB END============
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: DynamoDBAccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:GetItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                Resource:
+                  - !GetAtt testTable.Arn
+                  - !Sub "${testTable.Arn}/index/*"
+    
+
+  #============OTHER ROLES END============
+
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Cors:
+        AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+
+  CreateUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/user/
+      Handler: handlers/userHandler.createUserHandler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        CreateUser:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /user
+            Method: POST
+
+  GetAllUsersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/user/
+      Handler: handlers/userHandler.getAllUsersHandler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        GetAllUsers:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /user
+            Method: GET
+
+  GetUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/user/
+      Handler: handlers/userHandler.getUserHandler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        GetUser:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /user/{id}
+            Method: GET
+
+  UpdatetUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/user/
+      Handler: handlers/userHandler.updatetUserHandler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        UpdatetUser:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /user/{id}
+            Method: PUT
+
+  DeleteUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/user/
+      Handler: handlers/userHandler.deleteUserHandler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        DeleteUser:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /user/{id}
+            Method: DELETE
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ApiGatewayApi}.execute-api.${AWS::Region}.amazonaws.com/prod/"
+
+  FunctionArn:
+    Description: "Lambda Function ARN"
+    Value: ""
