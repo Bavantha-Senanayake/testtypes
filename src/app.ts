@@ -1,16 +1,19 @@
 import express, { Request, Response } from 'express';
 import userRoutes from './routes/userRoutes';
+import { corsHeaders } from './utils/corsUtils';
 
 const app = express();
 
 app.use(express.json({ type: (req) => req.headers['content-type']?.includes('json') || false }));
 app.use(express.urlencoded({ extended: true }));
 
-// CORS middleware
+// CORS middleware - applies to ALL routes
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  // Apply all CORS headers from corsUtils
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    res.header(key, value);
+  });
+
   if (req.method === 'OPTIONS') {
     res.sendStatus(200);
     return;
