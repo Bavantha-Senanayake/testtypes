@@ -15,7 +15,6 @@ Globals:
         NEW: !Ref new
         Environment: !Ref Environment
 
-
 Parameters:
   Environment:
     Type: String
@@ -26,12 +25,6 @@ Parameters:
   AwsRegion:
     Type: String
     Description: AWS region
-  NodeEnv:
-    Type: String
-    Description: Node.js environment
-  new:
-    Type: String
-    Description: A new parameter for demonstration
 
 
 Resources:
@@ -83,7 +76,6 @@ Resources:
                 Resource:
                   - !GetAtt testTable.Arn
                   - !Sub "${testTable.Arn}/index/*"
-    
 
   #============OTHER ROLES END============
 
@@ -95,9 +87,6 @@ Resources:
         AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
         AllowHeaders: "'*'"
         AllowOrigin: "'*'"
-
-
-
 
   AddFabricFunction:
     Type: AWS::Serverless::Function
@@ -112,8 +101,6 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
             Path: /fabric
             Method: POST
-           
-
 
   UpdateFabricFunction:
     Type: AWS::Serverless::Function
@@ -128,8 +115,6 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
             Path: /fabric/{name}
             Method: PUT
-           
-
 
   DeleteFabricFunction:
     Type: AWS::Serverless::Function
@@ -144,8 +129,6 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
             Path: /fabric/{name}
             Method: DELETE
-           
-
 
   GetFabricFunction:
     Type: AWS::Serverless::Function
@@ -160,8 +143,6 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
             Path: /fabric/{name}
             Method: GET
-           
-
 
   GetAllFabricsFunction:
     Type: AWS::Serverless::Function
@@ -176,7 +157,6 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
             Path: /fabric
             Method: GET
-           
 
 Outputs:
   ApiUrl:
