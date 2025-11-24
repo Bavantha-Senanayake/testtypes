@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import IssuedFabricModel from '../models/issuedFabricModel';
 
-export const getAllIssuedFabrics = async (_req: Request, res: Response): Promise<void> => {
+export async function getAllIssuedFabrics(_req: Request, res: Response): Promise<void> {
   try {
     const issuedFabrics = await IssuedFabricModel.getAll();
     res.status(200).json(issuedFabrics);
@@ -9,9 +9,9 @@ export const getAllIssuedFabrics = async (_req: Request, res: Response): Promise
     console.error('Error getting all issued fabrics:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-};
+}
 
-export const assignType = async (req: Request, res: Response): Promise<void> => {
+export async function assignType(req: Request, res: Response): Promise<void> {
   try {
     const { name } = req.params;
     const { type } = req.body;
@@ -37,4 +37,4 @@ export const assignType = async (req: Request, res: Response): Promise<void> => 
     console.error('Error assigning type:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-};
+}
