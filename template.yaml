@@ -30,14 +30,12 @@ Resources:
   testTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Ref TableName
+      TableName: fabricTable
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: PK
           AttributeType: S
         - AttributeName: SK
-          AttributeType: S
-        - AttributeName: updatedAt
           AttributeType: S
       KeySchema:
         - AttributeName: PK

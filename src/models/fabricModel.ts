@@ -19,7 +19,7 @@ export interface CreateFabricData {
 }
 
 class FabricModel {
-  private static tableName = process.env.TABLE_NAME || 'testTable';
+  private static tableName = process.env.TABLE_NAME || 'fabricTable';
 
   static async create(data: CreateFabricData): Promise<Fabric> {
     // Check if name already exists
