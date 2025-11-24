@@ -3,14 +3,14 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "testStackTYPES"
+stack_name = "fabric"
 resolve_s3 = true
-s3_prefix = "testStackTYPES"
+s3_prefix = "fabric"
 region = "us-east-1"
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
 confirm_changeset = false
-parameter_overrides = "Environment=prod TableName=testTableTYpes AwsRegion=us-east-1 NodeEnv=ssssss new=testVasssssslue"
+parameter_overrides = "Environment=prod TableName=fabricTable AwsRegion=us-east-1"
 
 [default.global.parameters]
 region = "us-east-1"

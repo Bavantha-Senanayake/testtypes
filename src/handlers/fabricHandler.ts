@@ -4,35 +4,35 @@ import app from '../app';
 
 const server = awsServerlessExpress.createServer(app);
 
-export const createUserHandler = async (
+export const addFabricHandler = async (
   event: APIGatewayProxyEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {
   return awsServerlessExpress.proxy(server, event, context, 'PROMISE').promise;
 };
 
-export const getAllUsersHandler = async (
+export const updateFabricHandler = async (
   event: APIGatewayProxyEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {
   return awsServerlessExpress.proxy(server, event, context, 'PROMISE').promise;
 };
 
-export const getUserHandler = async (
+export const deleteFabricHandler = async (
   event: APIGatewayProxyEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {
   return awsServerlessExpress.proxy(server, event, context, 'PROMISE').promise;
 };
 
-export const updatetUserHandler = async (
+export const getFabricHandler = async (
   event: APIGatewayProxyEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {
   return awsServerlessExpress.proxy(server, event, context, 'PROMISE').promise;
 };
 
-export const deleteUserHandler = async (
+export const getAllFabricsHandler = async (
   event: APIGatewayProxyEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {

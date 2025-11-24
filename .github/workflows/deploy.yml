@@ -26,7 +26,7 @@ jobs:
         run: npm run build
 
       - name: Run custom build script
-        run: npm run custom-build -- user
+        run: npm run custom-build -- fabric
 
       - name: Setup AWS SAM CLI
         uses: aws-actions/setup-sam@v2
@@ -46,20 +46,18 @@ jobs:
       - name: SAM Deploy
         run: |
           sam deploy \
-            --stack-name testStackTYPES \
+            --stack-name fabric \
             --region us-east-1 \
             --capabilities CAPABILITY_IAM \
             --resolve-s3 \
             --parameter-overrides \
               Environment=prod \
-              TableName=testTableTYPES \
+              TableName=fabricTable \
               AwsRegion=us-east-1 \
-              NodeEnv=sjjjsssss \
-              new=jjj \
             --no-confirm-changeset 
           
       - name: Get API URL
         run: |
-          API_URL=$(aws cloudformation describe-stacks --stack-name onTest-serverless-dev --query "Stacks[0].Outputs[?OutputKey=='ApiUrl'].OutputValue" --output text)
+          API_URL=$(aws cloudformation describe-stacks --stack-name fabric --query "Stacks[0].Outputs[?OutputKey=='ApiUrl'].OutputValue" --output text)
           echo "API URL: $API_URL"
           echo "API_URL=$API_URL" >> $GITHUB_ENV

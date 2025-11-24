@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
-import userRoutes from './routes/userRoutes';
 import { corsHeaders } from './utils/corsUtils';
+import fabricRoutes from './routes/fabricRoutes';
 
 const app = express();
 
@@ -26,6 +26,6 @@ app.get('/', (_req: Request, res: Response) => {
   res.status(200).json({ status: 'healthy' });
 });
 
-app.use('/user', userRoutes);
+app.use('/fabric', fabricRoutes);
 
 export default app;

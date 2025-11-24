@@ -53,15 +53,6 @@ Resources:
           KeyType: HASH
         - AttributeName: SK
           KeyType: RANGE
-      LocalSecondaryIndexes:
-        - IndexName: QuestionsByUpdatedAt
-          KeySchema:
-            - AttributeName: PK
-              KeyType: HASH
-            - AttributeName: updatedAt
-              KeyType: RANGE
-          Projection:
-            ProjectionType: ALL
   #============DYNAMODB END============
 
   LambdaExecutionRole:
@@ -105,75 +96,87 @@ Resources:
         AllowHeaders: "'*'"
         AllowOrigin: "'*'"
 
-  CreateUserFunction:
+
+
+
+  AddFabricFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./build/user/
-      Handler: handlers/userHandler.createUserHandler
+      CodeUri: ./build/fabric/
+      Handler: handlers/fabricHandler.addFabricHandler
       Role: !GetAtt LambdaExecutionRole.Arn
       Events:
-        CreateUser:
+        AddFabric:
           Type: Api
           Properties:
             RestApiId: !Ref ApiGatewayApi
-            Path: /user
+            Path: /fabric
             Method: POST
+           
 
-  GetAllUsersFunction:
+
+  UpdateFabricFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./build/user/
-      Handler: handlers/userHandler.getAllUsersHandler
+      CodeUri: ./build/fabric/
+      Handler: handlers/fabricHandler.updateFabricHandler
       Role: !GetAtt LambdaExecutionRole.Arn
       Events:
-        GetAllUsers:
+        UpdateFabric:
           Type: Api
           Properties:
             RestApiId: !Ref ApiGatewayApi
-            Path: /user
-            Method: GET
-
-  GetUserFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: ./build/user/
-      Handler: handlers/userHandler.getUserHandler
-      Role: !GetAtt LambdaExecutionRole.Arn
-      Events:
-        GetUser:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ApiGatewayApi
-            Path: /user/{id}
-            Method: GET
-
-  UpdatetUserFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: ./build/user/
-      Handler: handlers/userHandler.updatetUserHandler
-      Role: !GetAtt LambdaExecutionRole.Arn
-      Events:
-        UpdatetUser:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ApiGatewayApi
-            Path: /user/{id}
+            Path: /fabric/{name}
             Method: PUT
+           
 
-  DeleteUserFunction:
+
+  DeleteFabricFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./build/user/
-      Handler: handlers/userHandler.deleteUserHandler
+      CodeUri: ./build/fabric/
+      Handler: handlers/fabricHandler.deleteFabricHandler
       Role: !GetAtt LambdaExecutionRole.Arn
       Events:
-        DeleteUser:
+        DeleteFabric:
           Type: Api
           Properties:
             RestApiId: !Ref ApiGatewayApi
-            Path: /user/{id}
+            Path: /fabric/{name}
             Method: DELETE
+           
+
+
+  GetFabricFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/fabric/
+      Handler: handlers/fabricHandler.getFabricHandler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        GetFabric:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /fabric/{name}
+            Method: GET
+           
+
+
+  GetAllFabricsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/fabric/
+      Handler: handlers/fabricHandler.getAllFabricsHandler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        GetAllFabrics:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /fabric
+            Method: GET
+           
 
 Outputs:
   ApiUrl:
