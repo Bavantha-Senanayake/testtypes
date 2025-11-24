@@ -41,7 +41,7 @@ const distFolder = path.join(__dirname, '..', 'dist');
 // Define subfolders for the microservice architecture
 const subfolders = ['controllers', 'routes', 'middlewares', 'models', 'services', 'configs', 'handlers'];
 // Define folders that should be copied entirely (regardless of keyword)
-const copyEntireFolders = ['models', 'configs', 'services', 'middlewares', 'utils'];
+const copyEntireFolders = ['models', 'configs', 'services', 'middlewares', 'utils', 'routes', 'controllers', 'handlers'];
 // Define root-level files that should always be copied
 const rootFilesToCopy = ['app.js', 'lambda.js', 'local.js'];
 // Define project root files that should always be copied
