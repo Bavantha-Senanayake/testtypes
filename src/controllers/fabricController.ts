@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import FabricModel from '../models/fabricModel';
-
+//add
 export const addFabric = async (req: Request, res: Response): Promise<void> => {
   try {
     interface CreateFabricRequest {
