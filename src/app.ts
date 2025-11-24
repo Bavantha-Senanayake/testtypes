@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import { corsHeaders } from './utils/corsUtils';
 import fabricRoutes from './routes/fabricRoutes';
+import transactionRoutes from './routes/transactionRoutes';
+import issuedRoutes from './routes/issuedRoutes';
 
 const app = express();
 
@@ -27,5 +29,9 @@ app.get('/', (_req: Request, res: Response) => {
 });
 
 app.use('/fabric', fabricRoutes);
+
+app.use('/transaction', transactionRoutes);
+
+app.use('/issued', issuedRoutes);
 
 export default app;

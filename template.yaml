@@ -154,6 +154,62 @@ Resources:
             Path: /fabric
             Method: GET
 
+  IssueFabricFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/fabric/
+      Handler: handlers/fabricHandler.issueFabricHandler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        IssueFabric:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /fabric/issue
+            Method: POST
+
+  GetAllTransactionsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/fabric/
+      Handler: handlers/transactionHandler.getAllTransactionsHandler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        GetAllTransactions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /transaction
+            Method: GET
+
+  GetAllIssuedFabricsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/fabric/
+      Handler: handlers/issuedHandler.getAllIssuedFabricsHandler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        GetAllIssuedFabrics:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /issued
+            Method: GET
+
+  AssignTypeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/fabric/
+      Handler: handlers/issuedHandler.assignTypeHandler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        AssignType:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /issued/{name}/type
+            Method: PUT
+
 Outputs:
   ApiUrl:
     Description: "API Gateway endpoint URL"

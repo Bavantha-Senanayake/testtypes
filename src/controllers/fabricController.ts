@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import FabricModel from '../models/fabricModel';
-//add
+import TransactionModel from '../models/transactionModel';
+import IssuedFabricModel from '../models/issuedFabricModel';
+
 export const addFabric = async (req: Request, res: Response): Promise<void> => {
   try {
     interface CreateFabricRequest {
@@ -101,6 +103,57 @@ export const getAllFabrics = async (_req: Request, res: Response): Promise<void>
     res.status(200).json(fabrics);
   } catch (error) {
     console.error('Error getting all fabrics:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const issueFabric = async (req: Request, res: Response): Promise<void> => {
+  try {
+    interface IssueFabricRequest {
+      name: string;
+      length: number;
+    }
+
+    const { name, length } = req.body as IssueFabricRequest;
+
+    if (!name || length === undefined) {
+      res.status(400).json({ error: 'Name and length are required' });
+      return;
+    }
+
+    if (typeof length !== 'number' || length <= 0) {
+      res.status(400).json({ error: 'Length must be a positive number' });
+      return;
+    }
+
+    const fabric = await FabricModel.getById(name);
+    if (!fabric) {
+      res.status(404).json({ error: 'Fabric not found' });
+      return;
+    }
+
+    if (fabric.length < length) {
+      res.status(400).json({ error: `Insufficient fabric length. Available: ${fabric.length}, Requested: ${length}` });
+      return;
+    }
+
+    const newLength = fabric.length - length;
+    await FabricModel.update(name, { length: newLength });
+
+    await TransactionModel.create({
+      fabricName: name,
+      issuedLength: length,
+    });
+
+    const issuedFabric = await IssuedFabricModel.addIssuedLength(name, length);
+
+    res.status(200).json({
+      message: 'Fabric issued successfully',
+      remainingLength: newLength,
+      totalIssued: issuedFabric.totalIssuedLength,
+    });
+  } catch (error) {
+    console.error('Error issuing fabric:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };

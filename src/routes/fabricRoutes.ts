@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.post('/', fabricController.addFabric);
 
+router.post('/issue', fabricController.issueFabric);
+
 router.put('/:name', fabricController.updateFabric);
 
 router.delete('/:name', fabricController.deleteFabric);

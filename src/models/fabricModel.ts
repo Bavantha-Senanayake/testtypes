@@ -1,5 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, DeleteCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, DeleteCommand, ScanCommand } from '@aws-sdk/lib-dynamodb';
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
@@ -64,13 +64,12 @@ class FabricModel {
   }
 
   static async getAll(): Promise<Fabric[]> {
-    const command = new QueryCommand({
+    const command = new ScanCommand({
       TableName: this.tableName,
-      KeyConditionExpression: 'PK = :pk',
+      FilterExpression: 'begins_with(PK, :pk)',
       ExpressionAttributeValues: {
         ':pk': 'FABRIC#',
       },
-      ScanIndexForward: false,
     });
 
     const result = await docClient.send(command);
