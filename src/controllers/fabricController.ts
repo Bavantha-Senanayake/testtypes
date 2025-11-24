@@ -3,13 +3,18 @@ import FabricModel from '../models/fabricModel';
 import TransactionModel from '../models/transactionModel';
 import IssuedFabricModel from '../models/issuedFabricModel';
 
+interface CreateFabricRequest {
+  name: string;
+  length: number;
+}
+
+interface IssueFabricRequest {
+  name: string;
+  length: number;
+}
+
 export const addFabric = async (req: Request, res: Response): Promise<void> => {
   try {
-    interface CreateFabricRequest {
-      name: string;
-      length: number;
-    }
-
     const { name, length } = req.body as CreateFabricRequest;
 
     if (!name || length === undefined) {
@@ -109,11 +114,6 @@ export const getAllFabrics = async (_req: Request, res: Response): Promise<void>
 
 export const issueFabric = async (req: Request, res: Response): Promise<void> => {
   try {
-    interface IssueFabricRequest {
-      name: string;
-      length: number;
-    }
-
     const { name, length } = req.body as IssueFabricRequest;
 
     if (!name || length === undefined) {
