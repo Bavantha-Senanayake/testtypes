@@ -9,10 +9,8 @@ Globals:
     MemorySize: 512
     Environment:
       Variables:
-        NODE_ENV: !Ref NodeEnv
         TABLE_NAME: !Ref TableName
         AWS_REGION_NAME: !Ref AwsRegion
-        NEW: !Ref new
         Environment: !Ref Environment
 
 Parameters:
