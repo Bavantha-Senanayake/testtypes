@@ -36,7 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
 // Define the keywords (can be passed as command-line arguments or use defaults)
-const keywords = process.argv.slice(2).length > 0 ? process.argv.slice(2) : ['user'];
+const keywords = process.argv.slice(2).length > 0 ? process.argv.slice(2) : ['fabric', 'issued', 'transaction'];
 const distFolder = path.join(__dirname, '..', 'dist');
 // Define subfolders for the microservice architecture
 const subfolders = ['controllers', 'routes', 'middlewares', 'models', 'services', 'configs', 'handlers'];
@@ -188,9 +188,8 @@ function organizeFilesForKeyword(keyword) {
     const appJsPath = path.join(distFolder, 'app.js');
     if (fs.existsSync(appJsPath)) {
         const destAppJsPath = path.join(buildFolder, 'app.js');
-        console.log(`Copying and customizing app.js`);
+        console.log(`Copying app.js without modification`);
         copyFile(appJsPath, destAppJsPath);
-        customizeAppJs(destAppJsPath, keyword);
     }
     // Copy other root-level files from dist (excluding app.js which was handled separately)
     rootFilesToCopy.filter(file => file !== 'app.js').forEach(file => {

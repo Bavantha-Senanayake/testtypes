@@ -26,7 +26,7 @@ jobs:
         run: npm run build
 
       - name: Run custom build script
-        run: npm run custom-build -- fabric issued transaction
+        run: npm run custom-build 
 
       - name: Setup AWS SAM CLI
         uses: aws-actions/setup-sam@v2
